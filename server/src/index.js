@@ -1,17 +1,19 @@
-const { initializeServer } = require("./server");
-const { initializeDB } = require("./utils/database");
-const { initializeSocket } = require("./utils/socket");
+const { serverConnect } = require("./server");
+const { databaseConnect } = require("./utils/database");
+const { socketConnect } = require("./utils/socket");
 
 async function startServer() {
   try {
-    // Initialize the database
-    await initializeDB();
+    // CONNECT TO THE DATABASE
+    await databaseConnect();
 
-    // Initialize the server and socket.io
-    const server = initializeServer();
-    initializeSocket(server);
+    // START THE SERVER INSTANCE
+    const server = serverConnect();
 
-    // Start listening for requests
+    // START LISTENING FOR EMITIONS WITH SOCKET.IO
+    socketConnect(server);
+
+    // START LISTENING FOR REQUESTS
     const PORT = process.env.PORT || 3001;
     server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

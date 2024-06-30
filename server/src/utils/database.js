@@ -1,10 +1,31 @@
-// db.js
-async function initializeDB() {
-  // Mock database initialization
-  console.log("Initializing database...");
-  // Here you can add your database connection logic
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  console.log("Database initialized!");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
+
+async function databaseConnect() {
+  // if (process.env.NODE_ENV == "production"){
+  // 	databaseUrl = process.env.DATABASE_URL_PRODUCTION
+  // }
+  console.log(process.env.DATABASE_URL);
+  let databaseURL = process.env.DATABASE_URL;
+
+  await mongoose.connect(databaseURL);
+  console.log("Database connecting completed!");
 }
 
-module.exports = { initializeDB };
+async function databaseClose() {
+  // Disconnect from database
+  await mongoose.connection.close();
+  console.log("DB is disconnected!");
+}
+
+async function databaseClear() {
+  // Delete all data in database
+  await mongoose.connection.db.dropDatabase();
+}
+
+module.exports = {
+  databaseConnect,
+  databaseClose,
+  databaseClear,
+};

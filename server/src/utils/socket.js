@@ -1,7 +1,7 @@
-// socket.js
+// REQURIE THE SERVER PACKAGE FROM SOCKET.IO
 const { Server } = require("socket.io");
 
-function initializeSocket(server) {
+function socketConnect(server) {
   const io = new Server(server, {
     cors: {
       origin: "http://localhost:3000",
@@ -19,4 +19,4 @@ function initializeSocket(server) {
   });
 }
 
-module.exports = { initializeSocket };
+module.exports = { socketConnect };
