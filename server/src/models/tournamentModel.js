@@ -17,12 +17,6 @@ const TournamentSchema = mongoose.Schema(
       enum: ["life", "travel", "photography", "coding"],
       required: true,
     },
-    chats: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Chat",
-      },
-    ],
   },
   {
     timestamps: true,

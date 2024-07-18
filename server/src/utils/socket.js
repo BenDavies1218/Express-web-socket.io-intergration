@@ -1,6 +1,5 @@
 const { Server } = require("socket.io");
-const { ChatModel } = require("../models/chatModel.js");
-const { TournamentModel } = require("../models/tournamentModel.js");
+const { ChatModel } = require("../models/chatModel");
 
 function socketConnect(server) {
   const io = new Server(server, {
@@ -33,12 +32,6 @@ function socketConnect(server) {
       // Save the message to the database
       const chatMessage = new ChatModel({ chatId, userId, message });
       await chatMessage.save();
-
-      // Update the tournament's chat references
-      await TournamentModel.updateOne(
-        { _id: chatId },
-        { $push: { chats: chatMessage._id } }
-      );
 
       // Emit the message to the chat room
       io.to(chatId).emit("receive_message", data);
