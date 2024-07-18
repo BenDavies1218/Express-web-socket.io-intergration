@@ -6,7 +6,6 @@ async function databaseConnect() {
   // if (process.env.NODE_ENV == "production"){
   // 	databaseUrl = process.env.DATABASE_URL_PRODUCTION
   // }
-  console.log(process.env.DATABASE_URL);
   let databaseURL = process.env.DATABASE_URL;
 
   await mongoose.connect(databaseURL);
