@@ -1,14 +1,15 @@
-const { serverConnect } = require("./server");
+const { app } = require("./server");
 const { databaseConnect } = require("./utils/database");
 const { socketConnect } = require("./utils/socket");
+const http = require("http");
 
 async function startServer() {
   try {
     // CONNECT TO THE DATABASE
     await databaseConnect();
 
-    // START THE SERVER INSTANCE
-    const server = serverConnect();
+    // DECLARE THE HTTP SERVER FOR SOCKETS.IO
+    const server = http.createServer(app);
 
     // START LISTENING FOR EMITIONS WITH SOCKET.IO
     socketConnect(server);

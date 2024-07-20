@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const { chatModel } = require("./chatModel.js");
 
-const TournamentSchema = mongoose.Schema(
+const TournamentSchema = new mongoose.Schema(
   {
     tournamentName: {
       type: String,
@@ -17,6 +18,10 @@ const TournamentSchema = mongoose.Schema(
       enum: ["life", "travel", "photography", "coding"],
       required: true,
     },
+    chats: {
+      type: [chatModel],
+      required: false,
+    },
   },
   {
     timestamps: true,
@@ -24,7 +29,4 @@ const TournamentSchema = mongoose.Schema(
 );
 
 const TournamentModel = mongoose.model("Tournament", TournamentSchema);
-
-module.exports = {
-  TournamentModel,
-};
+module.exports = { TournamentModel };

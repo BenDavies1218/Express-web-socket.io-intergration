@@ -5,32 +5,54 @@ const useMessage = (props) => {
   const [receivedMessages, setReceivedMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState(null);
-  const userId = props.userId;
-  const chatId = props.chatId;
 
+  // USE PROPS TO SET THESE
+  const username = "ben";
+  const userId = "669bb4c46b124aa44f5c2f95";
+  const tournamentChatId = "669bb4c56b124aa44f5c2f98";
+
+  // "undefined" means the URL will be computed from the `window.location` object. but in a dev environment use the local port
   const URL =
     process.env.NODE_ENV === "production" ? undefined : "http://localhost:3001";
 
   useEffect(() => {
+    // Create a new socket connection
     const newSocket = io(URL);
     setSocket(newSocket);
 
-    newSocket.emit("join_room", chatId);
+    // Join the room
+    newSocket.emit("join_room", tournamentChatId);
 
-    newSocket.on("load_messages", (messages) => {
-      setReceivedMessages(messages.map((msg) => msg.message));
-    });
-
+    // Listen for incoming messages
     newSocket.on("receive_message", (data) => {
-      setReceivedMessages((prevMessages) => [...prevMessages, data.message]);
+      console.log(data);
+      setReceivedMessages((prevMessages) => [...prevMessages, data]);
     });
 
-    return () => newSocket.close();
-  }, [URL, chatId]);
+    // Listen for previous messages when joining a room
+    newSocket.on("load_messages", (messages) => {
+      console.log(messages);
+      setReceivedMessages(messages);
+    });
 
-  const sendMessage = () => {
+    // Clean up on unmount
+    return () => {
+      newSocket.off("receive_message");
+      newSocket.off("load_messages");
+      newSocket.close();
+    };
+  }, [URL, tournamentChatId]);
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+
     if (socket && message) {
-      socket.emit("send_message", { message, userId, chatId });
+      socket.emit("send_message", {
+        message,
+        userId,
+        tournamentId: tournamentChatId,
+        username,
+      });
       setMessage("");
     }
   };

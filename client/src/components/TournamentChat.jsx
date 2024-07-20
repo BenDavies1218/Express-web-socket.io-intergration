@@ -6,18 +6,20 @@ export default function TournamentChat(props) {
 
   return (
     <>
-      <h1>Messages</h1>
-      <ul>
+      <form onSubmit={sendMessage}>
+        <h1>Messages</h1>
         {receivedMessages.map((msg, index) => (
-          <li key={index}>{msg}</li>
+          <h5 key={index}>
+            {msg.username}: {msg.message}
+          </h5>
         ))}
-      </ul>
-      <input
-        placeholder="message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <button onClick={sendMessage}>Send a Message</button>
+        <input
+          placeholder="message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button type="submit">Send a Message</button>
+      </form>
     </>
   );
 }
